@@ -6,46 +6,49 @@ response = requests.get("https://www.espn.com/nfl/teams").text
 soup = BeautifulSoup(response,'lxml')
 teams = soup.find('div', class_='layout is-split')
 statistics_url = []
+
 for link in teams.findAll('a', {'class': 'AnchorLink'}):
     try:
-        
         stats_url = link['href'].split('/')
         #print(stats_url)
         if('stats' in stats_url):
             statistics_url.append(link['href'])
 
-
     except KeyError:
         pass
-#print(statistics_url[0])
-count = 0
+
 for team in statistics_url:
-    url = "https://espn.com" + team #team should be here when everything gets put into for loop
-        #print(url)
-    team_name = [sub.replace('/nfl/team/stats/_/name/','') for sub in statistics_url] 
-    
-    team_prefixes = ["buf/","mia/","ne/","nyj/","bal/","cin/","cle/","pit/",
-                    "hou/","ind/","jax/","ten/","den/","kc/","lv/","lac/","dal/",
-                    "nyg/","phi/","wsh/","chi/","det/","gb/","min/","atl/","car/",
-                    "no/","tb/","ari/","lar/","sf/","sea/"]
-    for string in team_prefixes:
-        team_name = statistics_url[count].replace(string,'')
-    #team_name = team_name.replace(team_prefixes,'')
-    print(team_name)
-    count = count + 1
+    url = "https://espn.com" + team 
     team_url = requests.get(url).text
     stats = BeautifulSoup(team_url, 'lxml')
-    #print(stats.prettify())
     yards = stats.find('div', class_='Wrapper Card__Content')
-    #print(yards.prettify())
+    
+    team_city = stats.find('div', class_='StickyContainer').find('span', class_='db pr3 nowrap').text
+    team_mascot = stats.find('div', class_='StickyContainer').find('span', class_='db fw-bold').text
+    team_name = team_city + " " + team_mascot
 
+    ############################################################################
     passing_stats   = yards.find('div',class_='ResponsiveTable ResponsiveTable--fixed-left mt5 remove_capitalize')
     passing_stats = passing_stats.find('div', class_='flex')
-    #print(passing_stats.prettify())
     qb_name = passing_stats.find('tr', class_='Table__TR Table__TR--sm Table__even').text.split('QB ')
     passing_stats_table = yards.find('div', class_='Table__ScrollerWrapper relative overflow-hidden').find('tr',class_='Table__TR Table__TR--sm Table__even')
+    pretty_passing = json.dumps(passing_stats, indent=4)
+
+    ############################################################################
     rushing_stats_table = yards.find_all('div', class_='ResponsiveTable ResponsiveTable--fixed-left mt5 remove_capitalize')[1]
+    
+    rushing_numbers = rushing_stats_table.find('div', class_='Table__Scroller')
+    rushing_numbers = rushing_numbers.find('tbody', class_='Table__TBODY')
+    rushing_numbers = rushing_numbers.find('tr',class_="Table__TR Table__TR--sm Table__even")
+    pretty_rushing = json.dumps(rushing_stats, indent=4)
+
+    ############################################################################
     receiving_stats_table = yards.find_all('div', class_='ResponsiveTable ResponsiveTable--fixed-left mt5 remove_capitalize')[2]
+    receiving_numbers = receiving_stats_table.find('div', class_='Table__Scroller')
+    receiving_numbers = receiving_numbers.find('tbody', class_='Table__TBODY')
+    receiving_numbers = receiving_numbers.find('tr',class_="Table__TR Table__TR--sm Table__even")
+    pretty_receiving = json.dumps(rec_stats, indent=4)
+
     passing_stats = {
                         'name'          : qb_name,
                         'games_played'  : passing_stats_table.findAll('td', class_='Table__TD')[0].text,
@@ -61,12 +64,8 @@ for team in statistics_url:
                         'sacks'         : passing_stats_table.findAll('td', class_='Table__TD')[10].text,
                         'qb_rating'     : passing_stats_table.findAll('td', class_='Table__TD')[12].text
 
-    }
-    pretty_passing = json.dumps(passing_stats, indent=4)
-    rushing_numbers = rushing_stats_table.find('div', class_='Table__Scroller')
-    rushing_numbers = rushing_numbers.find('tbody', class_='Table__TBODY')
-    rushing_numbers = rushing_numbers.find('tr',class_="Table__TR Table__TR--sm Table__even")
-    #print(rushing_stats_table)
+                    }
+    
     rushing_stats   = {
                         'name'         : rushing_stats_table.find_all('a', class_='AnchorLink')[0].text,
                         'games_played' : rushing_numbers.find_all('td', class_='Table__TD')[0].text,
@@ -82,12 +81,9 @@ for team in statistics_url:
                         'first_downs'  :rushing_numbers.find_all('td', class_='Table__TD')[10].text,
 
 
-    }
-    pretty_rushing = json.dumps(rushing_stats, indent=4)
-    receiving_numbers = receiving_stats_table.find('div', class_='Table__Scroller')
-    receiving_numbers = receiving_numbers.find('tbody', class_='Table__TBODY')
-    receiving_numbers = receiving_numbers.find('tr',class_="Table__TR Table__TR--sm Table__even")
-    #print(receiving_numbers)
+                        }
+    
+
     rec_stats       = {
                         'name'             : receiving_stats_table.find_all('a', class_='AnchorLink')[0].text,
                         'games_played'     : receiving_numbers.find_all('td', class_='Table__TD')[0].text,
@@ -103,9 +99,22 @@ for team in statistics_url:
                         'fumbles_lost'     : receiving_numbers.find_all('td', class_='Table__TD')[10].text,
                         'yards_after_catch': receiving_numbers.find_all('td', class_='Table__TD')[11].text,
                         'first_downs'      : receiving_numbers.find_all('td', class_='Table__TD')[12].text
-    }
-    pretty_receiving = json.dumps(rec_stats, indent=4)
-    '''print(pretty_passing)
+                        }
+    
+    
+    '''for key, value in passing_stats.items():             use this for future reference on how to 
+                                                            use specific stats if need be
+        if key == 'name':
+            print(value)
+    for key, value in rushing_stats.items():
+        if key == 'name':
+            print(value)
+    for key, value in rec_stats.items():
+        if key == 'name':
+            print(value)'''
+    '''print(team_name)
+    print()
+    print(pretty_passing)
     print()
     print(pretty_rushing)
     print()
