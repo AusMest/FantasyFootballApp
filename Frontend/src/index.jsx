@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/*import React, { useState, useEffect } from "react";
 import { Component } from "react";
 import {render} from 'react-dom';
 export default function Fantasy() {
@@ -55,7 +55,7 @@ export default function Fantasy() {
         <div className="App" >
             <header className="App-header">
                 <h1>Players List Goes Here</h1>
-                {/* Calling a data from setdata for showing*/}
+                {/* Calling a data from setdata for showing}
                 <p>{data.name}</p>
                 <p>{data.games_played}</p>
                 <p>{data.completions}</p>
@@ -73,3 +73,4 @@ export default function Fantasy() {
         </div>
         )}
 }
+*/

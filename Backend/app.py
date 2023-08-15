@@ -3,6 +3,7 @@ from flask import Flask,request
 import requests
 from bs4 import BeautifulSoup
 from flask_cors import CORS
+from collections import defaultdict
 import json
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -29,14 +30,21 @@ for link in teams.findAll('a', class_= 'AnchorLink'):
 
     except KeyError:
         pass
+#print(statistics_url)
 ##this is where the stats page magic happens
+count = 0
+passing_table = defaultdict(list)
+rushing_table = defaultdict(list)
+rec_table = defaultdict(list)
+defense_table = defaultdict(list)
 for team in statistics_url:
     url = "https://espn.com" + team 
     team_url = requests.get(url,headers=headers).text
     #print(team_url)
+    #print(team_url)
     stats = BeautifulSoup(team_url, 'lxml')
     yards = stats.find('div', class_='Wrapper Card__Content')
-    
+    #print(yards)
     #team_city = stats.find('div', class_='StickyContainer').find('span', class_='db pr3 nowrap').text
     #team_mascot = stats.find('div', class_='StickyContainer').find('span', class_='db fw-bold').text
     #team_name = team_city + " " + team_mascot
@@ -46,7 +54,7 @@ for team in statistics_url:
     passing_stats = passing_stats.find('div', class_='flex')
     qb_name = passing_stats.find('tr', class_='Table__TR Table__TR--sm Table__even').text.split('QB ')
     passing_stats_table = yards.find('div', class_='Table__ScrollerWrapper relative overflow-hidden').find('tr',class_='Table__TR Table__TR--sm Table__even')
-    #
+    #print(passing_stats_table)
 
     ############################################################################
     rushing_stats_table = yards.find_all('div', class_='ResponsiveTable ResponsiveTable--fixed-left mt5 remove_capitalize')[1]
@@ -69,7 +77,6 @@ for team in statistics_url:
     defense_numbers = defense_numbers.find('tr',class_="Table__TR Table__TR--sm Table__even")
     
     
-
     passing_stats = {
                         'name'          : qb_name,
                         'games_played'  : passing_stats_table.findAll('td', class_='Table__TD')[0].text,
@@ -78,7 +85,7 @@ for team in statistics_url:
                         'completion_per'  : passing_stats_table.findAll('td', class_='Table__TD')[3].text + "%",
                         'season_yards'  : passing_stats_table.findAll('td', class_='Table__TD')[4].text,
                         'avg'           : passing_stats_table.findAll('td', class_='Table__TD')[5].text,
-                        'yards_per_game'       : passing_stats_table.findAll('td', class_='Table__TD')[6].text,
+                        'yards_per_game': passing_stats_table.findAll('td', class_='Table__TD')[6].text,
                         'longest_pass'  : passing_stats_table.findAll('td', class_='Table__TD')[7].text,
                         'touchdowns'    : passing_stats_table.findAll('td', class_='Table__TD')[8].text,
                         'interceptions' : passing_stats_table.findAll('td', class_='Table__TD')[9].text,
@@ -86,6 +93,8 @@ for team in statistics_url:
                         'qb_rating'     : passing_stats_table.findAll('td', class_='Table__TD')[12].text
 
                     }
+    #print(passing_stats)
+    passing_table[count].append(passing_stats)
     
     rushing_stats   = {
                         'name'         : rushing_stats_table.find_all('a', class_='AnchorLink')[0].text,
@@ -103,6 +112,7 @@ for team in statistics_url:
 
 
                         }
+    rushing_table[count].append(rushing_stats)
     
 
     rec_stats       = {
@@ -121,7 +131,7 @@ for team in statistics_url:
                         'yards_after_catch': receiving_numbers.find_all('td', class_='Table__TD')[11].text,
                         'first_downs'      : receiving_numbers.find_all('td', class_='Table__TD')[12].text
                         }
-    
+    rec_table[count].append(rec_stats)
     
     '''for key, value in passing_stats.items():             use this for future reference on how to 
                                                             use specific stats if need be
@@ -151,22 +161,24 @@ for team in statistics_url:
 
 
     }
-    
-    
+    defense_table[count].append(defense_stats)
+    #print(count)
+    count = count + 1
 '''
 scoring_stats   = {}
 returning_stats = {}
 kicking_stats   = {}
 punting_stats   = {}'''
-
-pretty_passing = json.dumps(passing_stats, indent=4)
+#print(passing_table)
+pretty_passing = json.dumps(passing_table, indent=4)
 pretty_defense = json.dumps(defense_stats, indent=4)
 pretty_rushing = json.dumps(rushing_stats, indent=4)
 pretty_receiving = json.dumps(rec_stats, indent=4)
-
+#print(type(passing_table))
 @app.route('/')
 def home():
-    return passing_stats
+    return pretty_passing
+    
 if __name__ == "__main__": 
     app.run(port=5000,debug=True)
 #print(team_name)
