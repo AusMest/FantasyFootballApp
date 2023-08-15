@@ -14,18 +14,26 @@ export default function Fetch(){
         axios.get(url).then((res)=>{
             console.log(res)
             setdata(res.data)
-            console.log(data?.[0]?.[0].name)
+            //console.log(data?.[0]?.[0].name)
         }).catch((err)=>{
             console.log(err)
         })
     }
     function stripData(){
+
         document.getElementById('player_name').innerHTML = "Player Name: ";
         document.getElementById('games_played').innerHTML = "Games Played: ";
         document.getElementById('completions').innerHTML = "Completions: ";
-
-
-        var count = 0;
+        document.getElementById('attempts').innerHTML = "Attempts: ";
+        document.getElementById('completions_per').innerHTML = "Completions percentage: ";
+        document.getElementById('season_yds').innerHTML = "Season Yards: ";
+        document.getElementById('avg').innerHTML = "Average: ";
+        document.getElementById('yards_per').innerHTML = "Yards per: ";
+        document.getElementById('longest_pass').innerHTML = "Longest Pass: ";
+        document.getElementById('touchdowns').innerHTML = "Touchdowns: ";
+        document.getElementById('sacks').innerHTML = "Sacks: ";
+        document.getElementById('interceptions').innerHTML = "Interceptions: ";
+        document.getElementById('qb_rating').innerHTML = "QB Rating: ";
 
         for (var key in data) { 
             var name_ = document.createElement("p");
@@ -37,42 +45,71 @@ export default function Fetch(){
             var completions = document.createElement("p");
             completions.className = "completions";
             completions.innerHTML = data?.[key]?.[0].completions
+            var attempts = document.createElement("p");
+            attempts.className ="attempts";
+            attempts.innerHTML = data?.[key]?.[0].attempts
+            var comp_per = document.createElement("p");
+            comp_per.className ="completions_per";
+            comp_per.innerHTML = data?.[key]?.[0].completion_per;
+            var season_yds = document.createElement("p");
+            season_yds.className = "season_yards";
+            season_yds.innerHTML = data?.[key]?.[0].season_yards;
+            var avg = document.createElement("p");
+            avg.className = "average";
+            avg.innerHTML = data?.[key]?.[0].avg;
+            var yards_per = document.createElement("p");
+            yards_per.className = "yards_per";
+            yards_per.innerHTML = data?.[key]?.[0].yards_per_game;
+            var longest_pass = document.createElement("p");
+            longest_pass.className = "longest_pass";
+            longest_pass.innerHTML = data?.[key]?.[0].longest_pass;
+            var touchdowns = document.createElement("p");
+            touchdowns.className = "touchdowns";
+            touchdowns.innerHTML = data?.[key]?.[0].touchdowns;
+            var interceptions = document.createElement("p");
+            interceptions.className = "interceptions";
+            interceptions.innerHTML = data?.[key]?.[0].interceptions;
+            var sacks = document.createElement("p");
+            sacks.className ="sacks";
+            sacks.innerHTML = data?.[key]?.[0].sacks;
+            var qb_rating = document.createElement("p");
+            qb_rating.className = "qb_rating";
+            qb_rating.innerHTML = data?.[key]?.[0].qb_rating;
             if(data){
                 document.getElementById('player_name').appendChild(name_);
                 document.getElementById('games_played').appendChild(games);
                 document.getElementById('completions').appendChild(completions);
-
+                document.getElementById('attempts').appendChild(attempts);
+                document.getElementById('completions_per').appendChild(comp_per);
+                document.getElementById('season_yds').appendChild(season_yds);
+                document.getElementById('avg').appendChild(avg);
+                document.getElementById('yards_per').appendChild(yards_per);
+                document.getElementById('longest_pass').appendChild(longest_pass);
+                document.getElementById('touchdowns').appendChild(touchdowns);
+                document.getElementById('interceptions').appendChild(interceptions);
+                document.getElementById('sacks').appendChild(sacks);
+                document.getElementById('qb_rating').appendChild(qb_rating);
             }
-            count = count + 1;
-      
          }
-        
     }
     
-    
     return(
-
         <>
-              
             <div className='stats'>
-                <p id='player_name'/>
-                <br/>
+                <p id='player_name'/><br/>
                 <p id='games_played'> </p><br/>
                 <p id='completions'> </p><br/>
-                <p> Attempts: {data.attempts}</p><br/>
-                <p> Completions Per: {data.completion_per}</p><br/>
-                <p> Season Yards: {data.season_yards}</p><br/>
-                <p> Average: {data.avg}</p><br/>
-                <p> Yards Per Game: {data.yards_per_game}</p><br/>
-                <p> Longest pass:{data.longest_pass}</p><br/>
-                <p> Touchdowns: </p><br/>
-                <p> Interceptions: {data.interceptions}</p><br/>
-                <p> Sacks: {data.sacks}</p><br/>
-                <p> QB Rating: {data.qb_rating}</p><br/>
-                    
+                <p id='attempts'></p><br/>
+                <p id='completions_per'></p><br/>
+                <p id='season_yds'></p><br/>
+                <p id='avg'></p><br/>
+                <p id='yards_per'></p><br/>
+                <p id='longest_pass'></p><br/>
+                <p id='touchdowns'></p><br/>
+                <p id='interceptions'></p><br/>
+                <p id='sacks'></p><br/>
+                <p id='qb_rating'></p><br/>  
             </div>
-
-
         </>
     )
 }

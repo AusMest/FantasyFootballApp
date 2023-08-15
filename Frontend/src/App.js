@@ -5,7 +5,6 @@ export default function App(){
     return(
         <div className='App'>
             <header>
-                <a href="index.html">Austin New App</a>
             </header>
             <div id='secwrapper'>
                 <section>
