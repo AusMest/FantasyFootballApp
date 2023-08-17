@@ -171,13 +171,14 @@ kicking_stats   = {}
 punting_stats   = {}'''
 #print(passing_table)
 pretty_passing = json.dumps(passing_table, indent=4)
-pretty_defense = json.dumps(defense_stats, indent=4)
-pretty_rushing = json.dumps(rushing_stats, indent=4)
-pretty_receiving = json.dumps(rec_stats, indent=4)
+pretty_defense = json.dumps(defense_table, indent=4)
+pretty_rushing = json.dumps(rushing_table, indent=4)
+pretty_receiving = json.dumps(rec_table, indent=4)
 #print(type(passing_table))
 @app.route('/')
 def home():
     return pretty_passing
+    #return '{} {} {} {}'.format(pretty_passing,pretty_defense,pretty_rushing,pretty_receiving)
     
 if __name__ == "__main__": 
     app.run(port=5000,debug=True)

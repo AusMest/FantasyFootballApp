@@ -7,7 +7,7 @@ export default function App(){
             <header>
             </header>
             <div id='secwrapper'>
-                <section>
+                <section >
                 <Routes>
                     <Route path="/" element={<Fetch/>}/>
                 </Routes>
