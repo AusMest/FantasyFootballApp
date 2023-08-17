@@ -1,4 +1,5 @@
 import Fetch from './components/fetch';
+import Runners from './components/runners';
 import {Routes,Route} from 'react-router-dom'
 
 export default function App(){
@@ -8,9 +9,12 @@ export default function App(){
             </header>
             <div id='secwrapper'>
                 <section >
-                <Routes>
-                    <Route path="/" element={<Fetch/>}/>
-                </Routes>
+                
+                    <Routes>
+                        <Route path="/" element={<Fetch/>}/>
+                        <Route path="runners" element={<Runners/>}/>
+                    </Routes>
+                    
                 </section>
             </div>
         </div>

@@ -101,11 +101,11 @@ for team in statistics_url:
                         'games_played' : rushing_numbers.find_all('td', class_='Table__TD')[0].text,
                         'carries'      : rushing_numbers.find_all('td', class_='Table__TD')[1].text,
                         'yards'        : rushing_numbers.find_all('td', class_='Table__TD')[2].text,
-                        'avg/att'      : rushing_numbers.find_all('td', class_='Table__TD')[3].text,
+                        'avg_att'      : rushing_numbers.find_all('td', class_='Table__TD')[3].text,
                         'longest_run'  : rushing_numbers.find_all('td', class_='Table__TD')[4].text,
-                        '20+yard_runs' : rushing_numbers.find_all('td', class_='Table__TD')[5].text,
+                        'twenty_yard_runs' : rushing_numbers.find_all('td', class_='Table__TD')[5].text,
                         'touchdowns'   : rushing_numbers.find_all('td', class_='Table__TD')[6].text,
-                        'yards/game'   : rushing_numbers.find_all('td', class_='Table__TD')[7].text,
+                        'yards_game'   : rushing_numbers.find_all('td', class_='Table__TD')[7].text,
                         'fumbles'      : rushing_numbers.find_all('td', class_='Table__TD')[8].text,
                         'fumbles_lost' : rushing_numbers.find_all('td', class_='Table__TD')[9].text,
                         'first_downs'  :rushing_numbers.find_all('td', class_='Table__TD')[10].text,
@@ -179,7 +179,9 @@ pretty_receiving = json.dumps(rec_table, indent=4)
 def home():
     return pretty_passing
     #return '{} {} {} {}'.format(pretty_passing,pretty_defense,pretty_rushing,pretty_receiving)
-    
+@app.route('/runners')
+def runners():
+    return pretty_rushing
 if __name__ == "__main__": 
     app.run(port=5000,debug=True)
 #print(team_name)

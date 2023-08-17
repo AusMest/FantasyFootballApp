@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Fetch(){
     const[data,setData] = useState([])
@@ -102,7 +103,7 @@ export default function Fetch(){
     
     return(
         <>
-            
+            <section id='quarters'>
                 <p id='player_name'/><br/>
                 <p id='games_played'> </p><br/>
                 <p id='completions'> </p><br/>
@@ -116,6 +117,8 @@ export default function Fetch(){
                 <p id='interceptions'></p><br/>
                 <p id='sacks'></p><br/>
                 <p id='qb_rating'></p><br/>  
+                <Link to="/runners">Running Backs</Link>
+            </section>
         </>
     )
 }
