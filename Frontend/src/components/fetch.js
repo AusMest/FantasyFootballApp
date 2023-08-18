@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 
 export default function Fetch(){
     const[data,setData] = useState([])
-    var entires = []
+    
     useEffect(()=>{
         getStats()
+        setTitles()
         stripData()
     },[])
     function getStats(){
@@ -23,17 +24,12 @@ export default function Fetch(){
             console.log(err)
         })
     }
-    function stripData(){
-        var tracker = {}
-        if(JSON.parse(localStorage.getItem("data"))){
-            console.log("it exists")
-            tracker = JSON.parse(localStorage.getItem("data"));
-        }
+    function setTitles(){
         document.getElementById('player_name').innerHTML = "Player Name: " ;
         document.getElementById('games_played').innerHTML = "Games Played: ";
         document.getElementById('completions').innerHTML = "Completions: ";
         document.getElementById('attempts').innerHTML = "Attempts: ";
-        document.getElementById('completions_per').innerHTML = "Completions percentage: ";
+        document.getElementById('completions_per').innerHTML = "Completion %: ";
         document.getElementById('season_yds').innerHTML = "Season Yards: ";
         document.getElementById('avg').innerHTML = "Average: ";
         document.getElementById('yards_per').innerHTML = "Yards per: ";
@@ -42,6 +38,14 @@ export default function Fetch(){
         document.getElementById('sacks').innerHTML = "Sacks: ";
         document.getElementById('interceptions').innerHTML = "Interceptions: ";
         document.getElementById('qb_rating').innerHTML = "QB Rating: ";
+    }
+    function stripData(){
+        var tracker = {}
+        if(JSON.parse(localStorage.getItem("data"))){
+            console.log("it exists")
+            tracker = JSON.parse(localStorage.getItem("data"));
+        }
+
         for (var key in tracker) {
             console.log("data has cleared") 
             var name_ = document.createElement("p");

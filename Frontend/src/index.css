@@ -241,10 +241,17 @@ footer p{
 	font-weight:bold
 }
 
-
+#runners{
+	align-content: center;
+}
 #runners p{
 	padding-right: 20px;
 }
+#quarters{
+	align-content:center;
+
+}
 #quarters p{
 	padding-right: 5px;
+	align-items:center;
 }

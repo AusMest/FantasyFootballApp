@@ -7,6 +7,7 @@ export default function Runners(){
     var entires = []
     useEffect(()=>{
         getStats()
+        setTitles()
         stripData()
     },[])
     function getStats(){
@@ -23,12 +24,7 @@ export default function Runners(){
             console.log(err)
         })
     }
-    function stripData(){
-        var tracker = {}
-        if(JSON.parse(localStorage.getItem("runners"))){
-            console.log("it exists")
-            tracker = JSON.parse(localStorage.getItem("runners"));
-        }
+    function setTitles(){
         
         document.getElementById('player_name').innerHTML = "Player Name: " ;
         document.getElementById('games_played').innerHTML = "Games Played: ";
@@ -42,6 +38,15 @@ export default function Runners(){
         document.getElementById('fumbles').innerHTML = "Fumbles: ";
         document.getElementById('fumbles_lost').innerHTML = "Fumbles Lost: ";
         document.getElementById('first_downs').innerHTML = "First Downs: ";
+    }
+    function stripData(){
+        var tracker = {}
+        if(JSON.parse(localStorage.getItem("runners"))){
+            console.log("it exists")
+            tracker = JSON.parse(localStorage.getItem("runners"));
+        }
+        
+
         for (var key in tracker) {
             console.log("data has cleared") 
             var name_ = document.createElement("p");

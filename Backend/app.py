@@ -175,13 +175,24 @@ pretty_defense = json.dumps(defense_table, indent=4)
 pretty_rushing = json.dumps(rushing_table, indent=4)
 pretty_receiving = json.dumps(rec_table, indent=4)
 #print(type(passing_table))
+
 @app.route('/')
 def home():
     return pretty_passing
     #return '{} {} {} {}'.format(pretty_passing,pretty_defense,pretty_rushing,pretty_receiving)
+
 @app.route('/runners')
 def runners():
     return pretty_rushing
+
+@app.route('/receivers')
+def receivers():
+    return pretty_receiving
+
+@app.route('/defense')
+def defense():
+    return pretty_defense
+
 if __name__ == "__main__": 
     app.run(port=5000,debug=True)
 #print(team_name)
